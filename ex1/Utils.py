@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d, Axes3D
 
 
 def compute_cost(x, y, theta):
@@ -51,7 +52,7 @@ def visualize_optimization(x, y, doc_dict, f):
     x1 - the input data
     y - target (expected output for the data)
     doc_dict - doc-dictionary, output of the fit function in LinearRegression class
-    f - function that computes the wanted cost funtion
+    f - function that computes the wanted cost function
     """
     fig = plt.figure(figsize=(12, 12))
     ax = fig.gca(projection='3d')
@@ -73,14 +74,22 @@ def visualize_optimization(x, y, doc_dict, f):
 
     theta_hist = doc_dict["theta"]
     cost_hist = doc_dict["cost"]
-    ax.plot([th[0] for th in theta_hist], [th[1] for th in theta_hist], cost_hist, 'ro-')
+
+    th_hist0 = [th[0] for th in theta_hist]
+    th_hist1 = [th[1] for th in theta_hist]
+    ax.plot(th_hist0, th_hist1, cost_hist, 'ro-')
     plt.show()
 
+
 def plot_cost(doc):
+    """
+    plots the cost function over training iterations
+    doc - output of LinearRegression.fit().
+          a dictionary with the key "cost", and it's fitting values.
+    """
     plt.plot(doc["cost"])
     plt.xlabel("iterations (dozens)")
     plt.ylabel("cost function")
     plt.xlim((0, 1500))
     plt.title("cost function over iterations")
     plt.show()
-

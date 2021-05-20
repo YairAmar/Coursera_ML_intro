@@ -1,5 +1,6 @@
-from LinearRegression import *
-from Utils import *
+from linear_regression import LinearRegression
+from utils import compute_cost, feature_normalize, plot_model, visualize_optimization, plot_cost
+import numpy as np
 
 
 if __name__ == "__main__":
@@ -16,16 +17,16 @@ if __name__ == "__main__":
     x2 = np.insert(x2, 0, 1, axis=1)
 
     # lets train a model
-    lin_reg1 = LinearRegression()
+    lin_reg1 = LinearRegression(x1.shape[1])
     training_doc = lin_reg1.fit(x1, y1, save_cost=True, save_theta=True)
 
     # now training a model using normal equation
-    lin_reg2 = LinearRegression()
+    lin_reg2 = LinearRegression(x1.shape[1])
     theta_norm_eq = lin_reg2.fit_with_normal_eq(x1, y1)
     plot_model(x1, y1, theta_norm_eq)
 
     # training a linear regression in more than 1 dimension
-    lin_reg3 = LinearRegression()
+    lin_reg3 = LinearRegression(x2.shape[1])
     training_doc2 = lin_reg3.fit(x2, y2, save_cost=True, save_theta=True)
 
     # plotting the cost-function over iterations for the 1d and 2d data

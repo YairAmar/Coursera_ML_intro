@@ -1,4 +1,5 @@
-from Utils import *
+from utils import feature_normalize, compute_cost
+import numpy as np
 
 
 class LinearRegression:
@@ -6,11 +7,12 @@ class LinearRegression:
     This class is made for training a model of linear regression
     """
 
-    def __init__(self):
+    def __init__(self, n_features):
         """
         The constructor of the LinearRegression object
+        dof - number of features. For linear regression with N features send N
         """
-        self.theta = np.zeros((2,1))
+        self.theta = np.zeros((n_features, 1))
 
     def fit(self, x, y, iterations=1500, learning_rate=0.01, save_cost=False,
             save_theta=False, normalize_data=True):
@@ -27,7 +29,6 @@ class LinearRegression:
         if normalize_data:
             feature_normalize(x)
 
-        self.theta = np.zeros((x.shape[1], 1))
         m = len(y)
         cost_list = []
         theta_list = []
@@ -63,4 +64,3 @@ class LinearRegression:
         """
         y_hat = x @ self.theta
         return y_hat
-
