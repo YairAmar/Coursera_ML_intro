@@ -3,28 +3,28 @@ import numpy as np
 
 
 class LinearRegression:
-    """
-    This class is made for training a model of linear regression
-    """
+    """ This class is made for training a model of linear regression """
 
     def __init__(self, n_features):
-        """
-        The constructor of the LinearRegression object
-        dof - number of features. For linear regression with N features send N
+        """ The constructor of the LinearRegression object
+
+        Keyword arguments:
+        n_features - number of features. For linear regression with N features send N
         """
         self.theta = np.zeros((n_features, 1))
 
     def fit(self, x, y, iterations=1500, learning_rate=0.01, save_cost=False,
             save_theta=False, normalize_data=True):
-        """
-        Trains the Linear-Regression model.
+        """ Trains the Linear-Regression model.
         the model's weights are optimized using batch gradient descent
-        x1 - the input data
-        y - target (expected output for the data)
-        iterations - number of gradient descent iterations, defaulted to be 1500
-        learning_rate -  defaulted to be 0.01
-        save_cost - if True, fit will return a list of the cost-function's values
-        save_theta - if True, fit will return a list of theta's values
+
+        Keyword arguments:
+        x -- input data
+        y -- target
+        iterations -- number of gradient descent iterations (default 1500)
+        learning_rate -  (default 0.01)
+        save_cost - if True, fit will return a list of the cost-function's values (default False)
+        save_theta - if True, fit will return a list of theta's values (default False)
         """
         if normalize_data:
             feature_normalize(x)
@@ -47,20 +47,22 @@ class LinearRegression:
         return {"cost": cost_list, "theta": theta_list}
 
     def fit_with_normal_eq(self, x, y):
-        """
-        Solves the linear regression problem with a closed formula of normal equation
-        x1 - input data
-        y - target
+        """ Solves the linear regression problem with a closed formula of normal equation
         returns theta, when it contains [theta_0,theta_1]
+
+        Keyword arguments:
+        x - input data
+        y - target
         """
         # used pseudo-inverse for stability
         self.theta = np.linalg.pinv(x.T @ x) @ x.T @ y
         return self.theta
 
     def predict(self, x):
-        """
-        x1 - input data
-        returns a prediction using the linear model
+        """ Applies the linear regression model to return a prediction
+
+        Keyword arguments:
+        x - input data
         """
         y_hat = x @ self.theta
         return y_hat

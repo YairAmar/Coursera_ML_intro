@@ -4,11 +4,12 @@ from mpl_toolkits.mplot3d import axes3d, Axes3D
 
 
 def compute_cost(x, y, theta):
-    """
-    computing the cost function
-    x1 - input data, with a column of 1
-    y - input target
-    returns the cost function's value
+    """ Computes the cost function's value
+
+    Keyword arguments:
+    x -- input data, with a column of 1
+    y -- input target
+    theta -- weights of the linear regression
     """
     m = len(y)
     y_hat = x @ theta
@@ -17,22 +18,24 @@ def compute_cost(x, y, theta):
 
 
 def feature_normalize(x):
+    """ Normalizes data to be ~ N(0,1)
+
+    Keyword arguments:
+    x -- input data
     """
-    normalizes data to be ~ N(0,1)
-    x1 - input data
-    """
-    normalize = lambda vec: (vec - np.mean(vec)) / np.std(vec)
+    def normalize(vec): return (vec - np.mean(vec)) / np.std(vec)
     for i in np.arange(x.shape[1] - 1) + 1:
         x[:, i] = normalize(x[:, i])
 
 
 def plot_model(x, y, theta):
-    """
+    """ Visualizes a trained regression model, while plotting the data as well
     Works only for 1-d data
-    visualizes a trained regression model, while plotting the data as well
-    x1 - the input data
-    y - target (expected output for the data)
-    theta - weights of the linear regression
+
+    Keyword arguments:
+    x -- the input data
+    y -- target
+    theta -- weights of the linear regression
     """
     plt.scatter(x[:, -1], y, marker="3")
     plt.xlabel("x1")
@@ -46,13 +49,14 @@ def plot_model(x, y, theta):
 
 
 def visualize_optimization(x, y, doc_dict, f):
-    """
+    """ Creates a 3-d surface plot for the given cost-function, with the values that theta got through the training
     Works only for 1-d data
-    creates a 3-d surface plot for the given cost-function
-    x1 - the input data
-    y - target (expected output for the data)
-    doc_dict - doc-dictionary, output of the fit function in LinearRegression class
-    f - function that computes the wanted cost function
+
+    Keyword arguments:
+    x -- the input data
+    y -- target
+    doc_dict -- output of the fit function in LinearRegression class
+    f -- function that computes the wanted cost function
     """
     fig = plt.figure(figsize=(12, 12))
     ax = fig.gca(projection='3d')
@@ -82,9 +86,10 @@ def visualize_optimization(x, y, doc_dict, f):
 
 
 def plot_cost(doc):
-    """
-    plots the cost function over training iterations
-    doc - output of LinearRegression.fit().
+    """ Plots the cost function over training iterations
+
+    Keyword arguments:
+    doc -- output of the fit function in LinearRegression class
           a dictionary with the key "cost", and it's fitting values.
     """
     plt.plot(doc["cost"])
@@ -93,3 +98,16 @@ def plot_cost(doc):
     plt.xlim((0, 1500))
     plt.title("cost function over iterations")
     plt.show()
+
+
+def load_data(path):
+    """ Loading data and formatting for the latter linear regression
+
+    Keyword arguments:
+    path -- directory path of the csv file containing the data
+    """
+    data1 = np.loadtxt(path, delimiter=',', unpack=True)
+    x = np.array(data1[:-1]).T
+    y = np.array(data1[-1:]).T
+    x = np.insert(x, 0, 1, axis=1)
+    return x, y

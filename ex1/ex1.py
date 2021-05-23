@@ -1,20 +1,13 @@
 from linear_regression import LinearRegression
-from utils import compute_cost, feature_normalize, plot_model, visualize_optimization, plot_cost
+from utils import compute_cost, feature_normalize, plot_model, visualize_optimization, plot_cost, load_data
 import numpy as np
+import sys
 
 
-if __name__ == "__main__":
-    # loading data
-    data_dir1 = "data\ex1data1.txt"
-    data_dir2 = "data\ex1data2.txt"
-    data1 = np.loadtxt(data_dir1, delimiter=',', unpack=True)
-    data2 = np.loadtxt(data_dir2, delimiter=',', unpack=True)
-    x1 = np.array(data1[:-1]).T
-    y1 = np.array(data1[-1:]).T
-    x1 = np.insert(x1, 0, 1, axis=1)
-    x2 = np.array(data2[:-1]).T
-    y2 = np.array(data2[-1:]).T
-    x2 = np.insert(x2, 0, 1, axis=1)
+def main():
+    # reading and formatting the data
+    x1, y1 = load_data(sys.argv[1])
+    x2, y2 = load_data(sys.argv[2])
 
     # lets train a model
     lin_reg1 = LinearRegression(x1.shape[1])
@@ -40,3 +33,5 @@ if __name__ == "__main__":
     visualize_optimization(x1, y1, training_doc, f=compute_cost)
 
 
+if __name__ == "__main__":
+    main()
