@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d, Axes3D
 from typing import Dict, Callable
+import const
 
 
 def compute_cost(x: np.array, y: np.array, theta: np.array) -> np.float:
@@ -30,12 +31,13 @@ def feature_normalize(x: np.array):
         x: input data
     """
     def normalize(vec): return (vec - np.mean(vec)) / np.std(vec)
-    for i in np.arange(x.shape[1] - 1) + 1:
+    for i in np.arange(x.shape[const.ONE] - const.ONE) + const.ONE:
         x[:, i] = normalize(x[:, i])
 
 
 def plot_model(x: np.array, y: np.array, theta: np.array):
-    """ Visualizes a trained regression model, while plotting the data as well
+    """
+    Visualizes a trained regression model, while plotting the data as well
     Works only for 1-d data
 
     Args:
@@ -68,17 +70,17 @@ def visualize_optimization(x: np.array, y: np.array, doc_dict: Dict, f: Callable
     fig = plt.figure(figsize=(12, 12))
     ax = fig.gca(projection='3d')
 
-    theta0s = np.arange(-10, 10, .5)
-    theta1s = np.arange(-1, 8, .5)
-    th0, th1, cost = [], [], []
-    for theta0 in theta0s:
-        for theta1 in theta1s:
-            th0.append(theta0)
-            th1.append(theta1)
+    theta0_grid = np.arange(-10, 10, .5)
+    theta1_grid = np.arange(-1, 8, .5)
+    theta0_list, theta1_list, cost = [], [], []
+    for theta0 in theta0_grid:
+        for theta1 in theta1_grid:
+            theta0_list.append(theta0)
+            theta1_list.append(theta1)
             tmp_theta = np.array([[theta0], [theta1]])
             cost.append(f(x, y, tmp_theta))
 
-    ax.scatter(th0, th1, cost, c=np.abs(cost))
+    ax.scatter(theta0_list, theta1_list, cost, c=np.abs(cost))
     plt.xlabel(r'$\theta_0$', fontsize=30)
     plt.ylabel(r'$\theta_1$', fontsize=30)
     plt.title('Cost', fontsize=20)

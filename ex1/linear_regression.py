@@ -6,7 +6,8 @@ class LinearRegression:
     """ This class is made for training a model of linear regression """
 
     def __init__(self, n_features=2):
-        """ The constructor of the LinearRegression object
+        """
+        The constructor of the LinearRegression object
 
         Args:
             n_features: number of features. For linear regression with N features send N (default 2)
@@ -15,7 +16,8 @@ class LinearRegression:
 
     def fit(self, x: np.array, y: np.array, iterations: int = 1500, learning_rate: float = 0.01,
             save_cost: bool = False, save_theta: bool = False, normalize_data: bool = True) -> dict:
-        """ Trains the Linear-Regression model.
+        """
+        Trains the Linear-Regression model.
         the model's weights are optimized using batch gradient descent
 
         Args:
@@ -41,6 +43,7 @@ class LinearRegression:
             # documenting the values of theta and the cost-function
             if save_cost:
                 cost_list.append(compute_cost(x, y, self.theta))
+
             if save_theta:
                 theta_list.append(np.copy(self.theta))
 
@@ -52,7 +55,8 @@ class LinearRegression:
         return doc
 
     def fit_with_normal_eq(self, x: np.array, y: np.array) -> np.array:
-        """ Solves the linear regression problem with a closed formula of normal equation
+        """
+        Solves the linear regression problem with a closed formula of normal equation
 
         Args:
             x: input data
@@ -67,7 +71,8 @@ class LinearRegression:
         return theta
 
     def predict(self, x: np.array) -> np.array:
-        """ Applies the linear regression model to return a prediction
+        """
+        Applies the linear regression model to return a prediction
 
         Args:
             x: input data
