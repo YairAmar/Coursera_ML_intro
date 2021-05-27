@@ -54,7 +54,8 @@ def sigmoid(z: np.array) -> np.array:
 
 def train_test_split(x: np.array, y: np.array, ratio: float = 0.8) -> tuple:
     """
-    the
+    split the data into train and test batches, according to a given ratio
+
     Args:
         x: input data
         y: data labels
@@ -77,12 +78,10 @@ def train_test_split(x: np.array, y: np.array, ratio: float = 0.8) -> tuple:
 
 def plot_cost(cost_list: list):
     """
+    plots the cost function over iterations
 
     Args:
-        cost_list:
-
-    Returns:
-
+        cost_list: list of all the cost values
     """
     plt.plot(cost_list)
     plt.xlabel("iterations")

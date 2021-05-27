@@ -91,7 +91,7 @@ class LogisticRegression:
         Returns:
             acc: accuracy, correct classification rate in range 0-1
         """
-        pred = np.array(self.predict(x)) - y
+        pred = self.predict(x).astype(int) - y
         m = pred.shape[0]
         acc = 1 - np.sum(np.abs(pred)) / m
         return acc
