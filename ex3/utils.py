@@ -14,8 +14,7 @@ def load_data(path: str, add_bias: bool = True) -> tuple:
         x: data features
         y: data classes
     """
-    data_path = path
-    data = loadmat(data_path)
+    data = loadmat(path)
     x = np.array(data["X"])
 
     if add_bias:
@@ -43,7 +42,7 @@ def sigmoid(z: np.ndarray) -> np.ndarray:
 
 def train_test_split(x: np.ndarray, y: np.ndarray, ratio: float = 0.8) -> tuple:
     """
-    split the data into train and test batches, according to a given ratio
+    Split the data into train and test batches, according to a given ratio
 
     Args:
         x: input data
@@ -63,3 +62,21 @@ def train_test_split(x: np.ndarray, y: np.ndarray, ratio: float = 0.8) -> tuple:
     x_train, x_test = x[train_idx, :], x[test_idx, :]
     y_train, y_test = y[train_idx, :], y[test_idx, :]
     return x_train, y_train, x_test, y_test
+
+
+def compute_accuracy(classifier: object, x: np.ndarray, y: np.ndarray) -> float:
+    """
+    Calculates the accuracy of the classifier
+
+    Args:
+        classifier: the classifier which we evaluate
+        x: input data
+        y: data classes
+
+    Returns:
+        acc: accuracy, correct classification rate in range 0-1
+    """
+    y_hat = classifier.predict(x)
+    m = y_hat.shape[0]
+    acc = np.sum(np.squeeze(y_hat) == np.squeeze(y)) / m
+    return acc

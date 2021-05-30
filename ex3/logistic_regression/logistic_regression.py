@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
-from trainer import forward
-from trainer import gradient_descent
+from logistic_regression.trainer import forward
+from logistic_regression.trainer import gradient_descent
 from utils import train_test_split
 
 
@@ -9,7 +9,7 @@ class LogisticRegression:
 
     def __init__(self, n_features: int, deg: int):
         """
-        the constructor of the LogisticRegression object
+        The constructor of the LogisticRegression object
 
         Args:
             n_features: number of features in the input data
@@ -40,7 +40,7 @@ class LogisticRegression:
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
-        return a prediction over the input data, as a class
+        Return a prediction over the input data, as a class
 
         Args:
             x: input data
@@ -51,26 +51,10 @@ class LogisticRegression:
         hypo = np.argmax(forward(self.theta, x), axis=0).astype(int)
         return hypo
 
-    def accuracy(self, x: np.ndarray, y: np.ndarray) -> float:
-        """
-        calculates the accuracy of the classifier
-
-        Args:
-            x: input data
-            y: data classes
-
-        Returns:
-            acc: accuracy, correct classification rate in range 0-1
-        """
-        y_hat = self.predict(x)
-        m = y_hat.shape[0]
-        acc = np.sum(y_hat == y) / m
-        return acc
-
     def multi_class_fit(self, x: np.ndarray, y: np.ndarray, learning_rate: float = 0.001, max_iter: int = 2000,
                         n_classes: int = 10) -> np.ndarray:
         """
-        trains a multi-class logistic regression model by training <n_classes> models in a manner of 1 vs. all
+        Trains a multi-class logistic regression model by training <n_classes> models in a manner of 1 vs. all
 
         Args:
             x: input data
