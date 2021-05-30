@@ -1,11 +1,12 @@
-from utils import load_data, plot_data, train_test_split
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
+from utils import load_data, plot_data, train_test_split
 from logistic_regression import LogisticRegression
 from sklearn.preprocessing import PolynomialFeatures
-import matplotlib.pyplot as plt
 
 
-def plot_w_regularization(x, y):
+def plot_w_regularization(x: np.ndarray, y: np.ndarray):
     """
     Plots 4 graphs of the logistic regression model with polynomial features of degree 6
     and different values of regularization parameter in the cost function
@@ -19,33 +20,18 @@ def plot_w_regularization(x, y):
     x_train, y_train, x_test, y_test = train_test_split(x, y)
     log_reg = LogisticRegression(x_train.shape[1], deg=6)
 
+    llambdas = [0., 1., 10., 100.]
     plt.figure(figsize=(12, 16))
-    # Lambda = 0
-    log_reg.fit(x_train, y_train, max_iter=400, llambda=0., method="BFGS")
-    plt.subplot(221)
-    log_reg.plot_decision_bounds(x_train, y_train, llambda=0.)
-    print("for lambda = 0, train accuracy = ", log_reg.accuracy(x_train, y_train))
-    print("for lambda = 0, test accuracy = ", log_reg.accuracy(x_test, y_test))
-    # Lambda = 1
-    log_reg.fit(x_train, y_train, max_iter=400, llambda=1., method="BFGS")
-    plt.subplot(222)
-    log_reg.plot_decision_bounds(x_train, y_train, llambda=1.)
-    print("for lambda = 1, train accuracy = ", log_reg.accuracy(x_train, y_train))
-    print("for lambda = 1, test accuracy = ", log_reg.accuracy(x_test, y_test))
 
-    # Lambda = 10
-    log_reg.fit(x_train, y_train, max_iter=400, llambda=10., method="BFGS")
-    plt.subplot(223)
-    log_reg.plot_decision_bounds(x_train, y_train, llambda=10.)
-    print("for lambda = 10, train accuracy = ", log_reg.accuracy(x_train, y_train))
-    print("for lambda = 10, test accuracy = ", log_reg.accuracy(x_test, y_test))
+    for i, llambda in enumerate(llambdas):
+        log_reg.fit(x_train, y_train, max_iter=400, llambda=llambda, method="BFGS")
+        plt.subplot(2, 2, i+1)
+        log_reg.plot_decision_bounds(x_train, y_train, llambda=llambda)
+        train_accuracy = log_reg.compute_accuracy(x_train, y_train)
+        test_accuracy = log_reg.compute_accuracy(x_test, y_test)
+        print(f"for lambda = {llambda}, train accuracy = {train_accuracy}")
+        print(f"for lambda = {llambda}, test accuracy = {test_accuracy}")
 
-    # Lambda = 100.
-    log_reg.fit(x_train, y_train, max_iter=400, llambda=100., method="BFGS")
-    plt.subplot(224)
-    log_reg.plot_decision_bounds(x_train, y_train, llambda=100.)
-    print("for lambda = 100, train accuracy = ", log_reg.accuracy(x_train, y_train))
-    print("for lambda = 100, test accuracy = ", log_reg.accuracy(x_test, y_test))
     plt.show()
 
 
@@ -59,8 +45,10 @@ def main():
 
     log_reg1 = LogisticRegression(x1_train.shape[1], deg=1)
     log_reg1.fit(x1_train, y1_train, max_iter=400, llambda=0.)
-    print("the train accuracy of the linear model is: ", log_reg1.accuracy(x1_train, y1_train))
-    print("the test accuracy of the linear model is: ", log_reg1.accuracy(x1_test, y1_test))
+    train_accuracy = log_reg1.compute_accuracy(x1_train, y1_train)
+    test_accuracy = log_reg1.compute_accuracy(x1_test, y1_test)
+    print(f"the train accuracy of the linear model is: {train_accuracy}")
+    print(f"the test accuracy of the linear model is: {test_accuracy}")
 
     log_reg1.plot_decision_bounds(x1, y1)
     plt.show()
