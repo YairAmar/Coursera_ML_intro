@@ -3,16 +3,21 @@ import matplotlib.pyplot as plt
 from utils import compute_hypothesis, compute_cost_function, plot_data
 from scipy import optimize
 from sklearn.preprocessing import PolynomialFeatures
+from const import THRESHOLD
 
 
 class LogisticRegression:
+    """
+    A logistic regression classifier, can be used to create and train a model,
+    which later can be used to make predictions.
+     """
 
     def __init__(self, n_features: int, deg: int):
         """
-        The constructor of the LogisticRegression object
+        The constructor of the LogisticRegression object.
 
         Args:
-            n_features: number of features in the input data
+            n_features: number of features in the input data.
         """
         self.poly = PolynomialFeatures(deg)
         self.theta = np.zeros((n_features, 1))
@@ -20,7 +25,7 @@ class LogisticRegression:
     def fit(self, x: np.ndarray, y: np.ndarray, max_iter: int = 400, llambda: float = 0.,
             method: str = "Nelder-Mead") -> tuple:
         """
-        Trains the logistic regression model
+        Trains the logistic regression model.
 
         Args:
             x: input data
@@ -28,10 +33,10 @@ class LogisticRegression:
             max_iter: maximum number of iterations (default 400)
             llambda: lambda of the regularization argument (default 0.)
             method: optimization method (default "Nelder-Mead")
-                    for non-linear polynomials use "BFGS"
+                    for non-linear polynomials use "BFGS".
         Returns:
-            theta: weights of the logistic regression after training
-            cost_fun: value of the cost function after training
+            theta: weights of the logistic regression after training.
+            cost_fun: value of the cost function after training.
         """
         result = optimize.minimize(compute_cost_function, x0=self.theta, args=(x, y, llambda), method=method,
                                    options={"maxiter": max_iter, "disp": False})
@@ -42,7 +47,7 @@ class LogisticRegression:
 
     def plot_decision_bounds(self, x: np.ndarray, y: np.ndarray, llambda: float = 0.):
         """
-        Plots the decision boundaries of the model
+        Plots the decision boundaries of the model.
 
         Args:
             x: input data
@@ -54,6 +59,7 @@ class LogisticRegression:
         x1_grid = np.arange(boundary_x1[0], boundary_x1[1], 0.1)
         x2_grid = np.arange(boundary_x2[0], boundary_x2[1], 0.1)
         z_vals = np.zeros((len(x1_grid), len(x2_grid)))
+
         for x1_ind, x1_val in enumerate(x1_grid):
             for x2_ind, x2_val in enumerate(x2_grid):
                 sample = np.array([x1_val, x2_val]).reshape(1, -1)
@@ -65,33 +71,33 @@ class LogisticRegression:
         fmt = {0: 'Lambda = %d' % llambda}
         plt.clabel(cont, inline=1, fontsize=15, fmt=fmt)
         plt.title("Decision Boundary")
-        plot_data(x[:, 1:], y)
+        plot_data(x[:, :], y)
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
-        Returns a prediction over the input data, as a class
+        Returns a prediction over the input data, as a class.
 
         Args:
             x: input data
 
         Returns:
-            predictions: prediction of the data's class
+            predictions: prediction of the data's class.
         """
-        predictions = compute_hypothesis(self.theta, x) >= 0.5
+        predictions = compute_hypothesis(self.theta, x) >= THRESHOLD
         return predictions
 
     def compute_accuracy(self, x: np.ndarray, y: np.ndarray) -> float:
         """
-        Calculates the accuracy of the classifier
+        Calculates the accuracy of the classifier.
 
         Args:
             x: input data
             y: target
 
         Returns:
-            acc: accuracy, correct classification rate in range 0-1
+            acc: accuracy, correct classification rate in range 0-1.
         """
-        pred = self.predict(x) - y
+        pred = self.predict(x) == y
         m = pred.shape[0]
-        acc = 1 - np.sum(np.abs(pred)) / m
+        acc = np.sum(pred) / m
         return acc
