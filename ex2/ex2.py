@@ -33,6 +33,23 @@ def plot_w_regularization(x_train: np.ndarray, y_train: np.ndarray, x_test: np.n
     plt.show()
 
 
+def tryout_for_ex3():
+    data_path = r"C:\Users\student\Hafifa\ML_intro\ex3\data\ex3data1.mat"
+    annots = loadmat(data_path)
+    x = np.array(annots["X"])
+    poly = PolynomialFeatures(1)
+    x = poly.fit_transform(x)
+    y = np.array(annots["y"])
+    y[y == 10] = 0
+    idx = np.squeeze(np.bitwise_or((y == 1), (y == 8)))
+    y_cut = np.copy(y[idx, :])
+    y_cut[y_cut == 8] = 0
+    x_cut = np.copy(x[idx, :])
+    clf = LogisticRegression(x_cut.shape[1], deg=1)
+    curr_theta, _ = clf.fit(x_cut, y_cut)
+    print(clf.accuracy(x_cut, y_cut))
+
+
 def main():
     x1_train, y1_train, x1_test, y1_test = pre_process(file_path=sys.argv[1])
     log_reg1 = LogisticRegression(x1_train.shape[1], deg=1)
@@ -49,4 +66,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    tryout_for_ex3()
+
