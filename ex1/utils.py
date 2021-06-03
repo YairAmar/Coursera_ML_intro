@@ -30,8 +30,10 @@ def feature_normalize(x: np.array):
     Args:
         x: input data
     """
-    def normalize(vec): return (vec - np.mean(vec)) / np.std(vec)
-    for i in np.arange(x.shape[const.ONE] - const.ONE) + const.ONE:
+    def normalize(vec):
+        return (vec - np.mean(vec)) / np.std(vec)
+
+    for i in range(1, x.shape[1]):
         x[:, i] = normalize(x[:, i])
 
 
