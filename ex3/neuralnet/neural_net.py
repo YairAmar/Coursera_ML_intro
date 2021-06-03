@@ -8,7 +8,7 @@ class NeuralNet:
 
     def __init__(self):
         """The constructor of the NN-model object"""
-        self.thetas = load_nn_weights(sys.argv[2])
+        self.theta1, self.theta2 = load_nn_weights(sys.argv[2])
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
@@ -19,5 +19,5 @@ class NeuralNet:
         Returns:
             prediction: predicted label for each data-point
         """
-        prediction = np.argmax(forward(self.thetas, x), axis=0).astype(int)
+        prediction = np.argmax(forward(self.theta1, self.theta2, x), axis=0).astype(int)
         return prediction

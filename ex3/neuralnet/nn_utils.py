@@ -1,7 +1,7 @@
 from scipy.io import loadmat
 
 
-def load_nn_weights(path: str) -> list:
+def load_nn_weights(path: str) -> tuple:
     """
     Loading weights of a pre-trained NN
     Args:
@@ -14,4 +14,4 @@ def load_nn_weights(path: str) -> list:
     weights = loadmat(path)
     theta1 = weights["Theta1"]
     theta2 = weights["Theta2"]
-    return [theta1, theta2]
+    return theta1, theta2
