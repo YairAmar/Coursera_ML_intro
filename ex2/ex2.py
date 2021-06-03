@@ -1,42 +1,35 @@
-from utils import load_data, plot_data
 import sys
-from logistic_regression import LogisticRegression
-from sklearn.preprocessing import PolynomialFeatures
-import matplotlib.pyplot as plt
-from scipy.io import loadmat
 import numpy as np
+import matplotlib.pyplot as plt
+from utils import pre_process
+from logistic_regression import LogisticRegression
 
 
-def plot_w_regularization(x, y):
+def plot_w_regularization(x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray):
     """
     Plots 4 graphs of the logistic regression model with polynomial features of degree 6
     and different values of regularization parameter in the cost function
 
     Args:
-        x: input data
-        y: target
+        x_train: train data
+        y_train: train labels
+        x_test: test data
+        y_test: test labels
     """
-    poly_reg = PolynomialFeatures(6)
-    x = poly_reg.fit_transform(x)
-    log_reg = LogisticRegression(x.shape[1], deg=6)
+    log_reg = LogisticRegression(x_train.shape[1], deg=6)
 
+    lambda_values = [0., 1., 10., 100.]
     plt.figure(figsize=(12, 16))
-    # Lambda = 0
-    log_reg.fit(x, y, max_iter=400, llambda=0., method="BFGS")
-    plt.subplot(221)
-    log_reg.plot_decision_bounds(x, y, llambda=0.)
-    # Lambda = 1
-    log_reg.fit(x, y, max_iter=400, llambda=1., method="BFGS")
-    plt.subplot(222)
-    log_reg.plot_decision_bounds(x, y, llambda=1.)
-    # Lambda = 10
-    log_reg.fit(x, y, max_iter=400, llambda=10., method="BFGS")
-    plt.subplot(223)
-    log_reg.plot_decision_bounds(x, y, llambda=10.)
-    # Lambda = 100.
-    log_reg.fit(x, y, max_iter=400, llambda=100., method="BFGS")
-    plt.subplot(224)
-    log_reg.plot_decision_bounds(x, y, llambda=100.)
+
+    for i, llambda in enumerate(lambda_values):
+        log_reg.fit(x_train, y_train, max_iter=400, llambda=llambda, method="BFGS")
+        plt.subplot(2, 2, i+1)
+        log_reg.plot_decision_bounds(x_train, y_train, llambda=llambda)
+        train_accuracy = log_reg.compute_accuracy(x_train, y_train)
+        test_accuracy = log_reg.compute_accuracy(x_test, y_test)
+        print(f"for lambda = {llambda}, train accuracy = {train_accuracy}")
+        print(f"for lambda = {llambda}, test accuracy = {test_accuracy}")
+
     plt.show()
 
 
@@ -58,22 +51,18 @@ def tryout_for_ex3():
 
 
 def main():
-    x1, y1 = load_data(sys.argv[1], add_bias=False)
-    print(x1.shape)
-    plot_data(x1, y1)
+    x1_train, y1_train, x1_test, y1_test = pre_process(file_path=sys.argv[1])
+    log_reg1 = LogisticRegression(x1_train.shape[1], deg=1)
+    log_reg1.fit(x1_train, y1_train, max_iter=400, llambda=0.)
+    train_accuracy = log_reg1.compute_accuracy(x1_train, y1_train)
+    test_accuracy = log_reg1.compute_accuracy(x1_test, y1_test)
+    print(f"the train accuracy of the linear model is: {train_accuracy}")
+    print(f"the test accuracy of the linear model is: {test_accuracy}")
+
+    log_reg1.plot_decision_bounds(x1_train, y1_train)
     plt.show()
-    poly = PolynomialFeatures(1)
-    x1 = poly.fit_transform(x1)
-    log_reg1 = LogisticRegression(x1.shape[1], deg=1)
-    log_reg1.fit(x1, y1, max_iter=400, llambda=0.)
-    log_reg1.plot_decision_bounds(x1, y1)
-    plt.show()
-    print("accuracy = ", log_reg1.accuracy(x1, y1))
-    x2, y2 = load_data(sys.argv[2], add_bias=False)
-    plt.grid()
-    plot_data(x2, y2)
-    plt.show()
-    plot_w_regularization(x2, y2)
+    x2_train, y2_train, x2_test, y2_test = pre_process(file_path=sys.argv[2], poly_deg=6)
+    plot_w_regularization(x2_train, y2_train, x2_test, y2_test)
 
 
 if __name__ == "__main__":
