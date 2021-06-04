@@ -145,4 +145,6 @@ def pre_process(file_path: str, poly_deg: int = 1) -> tuple:
     poly = PolynomialFeatures(poly_deg)
     x = poly.fit_transform(x)
     x_train, y_train, x_test, y_test = train_test_split(x, y)
+    #x_train[:, 1:] = (x_train[:, 1:] - np.mean(x_train[:, 1:], axis=0)) / np.std(x_train[:, 1:], axis=0)
+    #x_test[:, 1:] = (x_test[:, 1:] - np.mean(x_test[:, 1:], axis=0)) / np.std(x_test[:, 1:], axis=0)
     return x_train, y_train, x_test, y_test
