@@ -22,7 +22,7 @@ class LogisticRegression:
         self.poly = PolynomialFeatures(deg)
         self.theta = np.zeros((n_features, 1))
 
-    def fit(self, x: np.ndarray, y: np.ndarray, max_iter: int = 400, llambda: float = 0.,
+    def fit(self, x: np.ndarray, y: np.ndarray, max_iter: int = 1000, llambda: float = 0.,
             method: str = "Nelder-Mead") -> tuple:
         """
         Trains the logistic regression model.
@@ -71,7 +71,7 @@ class LogisticRegression:
         fmt = {0: 'Lambda = %d' % llambda}
         plt.clabel(cont, inline=1, fontsize=15, fmt=fmt)
         plt.title("Decision Boundary")
-        plot_data(x[:, :], y)
+        plot_data(x[:, 1:], y)
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
